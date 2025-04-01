@@ -1,4 +1,4 @@
-# smu_course_election_helper 2.1
+# smu_course_election_helper 3.0
 
 ## 声明 Statement
 本软件不得用于商业用途，仅供学习交流，切勿用于非法用途，对此产生的一切后果作者本人概不负责。
