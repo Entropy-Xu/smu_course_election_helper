@@ -20,7 +20,7 @@ exe = EXE(
     a.scripts,
     [],
     exclude_binaries=True,
-    name='main',
+    name='Smu_Course_Election_Helper_2.1',
     debug=False,
     bootloader_ignore_signals=False,
     strip=False,
@@ -31,7 +31,6 @@ exe = EXE(
     target_arch=None,
     codesign_identity=None,
     entitlements_file=None,
-    icon=['logo.ico'],
 )
 coll = COLLECT(
     exe,
@@ -40,5 +39,5 @@ coll = COLLECT(
     strip=False,
     upx=True,
     upx_exclude=[],
-    name='main',
+    name='Smu_Course_Election_Helper_2.1',
 )

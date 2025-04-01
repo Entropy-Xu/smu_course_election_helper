@@ -162,10 +162,12 @@ def search_lesson(session,semester_id,name):
 
 
 def get_sessiontime(session, profileId):
-    while True:
+    retry_count = 0
+    max_retries = 5
+    while retry_count < max_retries:
         try:
             url = "https://jwxt.shmtu.edu.cn/shmtu/stdElectCourse!defaultPage.action?electionProfile.id=" + str(profileId)
-            result = session.get(url)
+            result = session.get(url, timeout=10)  # 添加超时设置
             data = result.text
             # print(data)
             # 解析HTML
@@ -177,9 +179,12 @@ def get_sessiontime(session, profileId):
             print("sessiontime=" + value)  # 打印提取的value值
             return value
         except Exception as e:
-            print("get_sessiontime出错")
+            print(f"get_sessiontime出错 (尝试 {retry_count+1}/{max_retries})")
             print("错误信息：", e)
+            retry_count += 1
             time.sleep(2)
+    
+    return None  # 如果多次尝试后仍失败，返回None
 
 
 def elect(session, profileId, elecSessionTime, lessonid):
@@ -191,7 +196,7 @@ def elect(session, profileId, elecSessionTime, lessonid):
             "operator0": str(lessonid) + ":true:0"
         }
 
-        result = session.post(url, data=data)
+        result = session.post(url, data=data, timeout=10)  # 添加超时设置
         data = result.text
         # print(data)
         # 解析HTML
@@ -208,12 +213,20 @@ def elect(session, profileId, elecSessionTime, lessonid):
             if element:
                 result = element[0].text_content().strip()  # 使用text_content()获取文本并使用strip()删除前导和尾随的空白
             else:
-                result = "返回结果错误!"
-        print(result)
+                # 检查会话是否失效
+                session_element = tree.xpath('//span[@style="color:#bbb"]')
+                if session_element and "会话已经失效" in session_element[0].text_content().strip():
+                    result = "会话已经失效，需要重新获取sessiontime"
+                else:
+                    result = "返回结果错误或未知状态!"
         return result
+    except requests.exceptions.Timeout:
+        return "请求超时，将重试"
+    except requests.exceptions.ConnectionError:
+        return "网络连接错误，将重试"
     except Exception as e:
         print("elect出错")
         print("错误信息：", e)
-        time.sleep(2)
+        return f"发生错误: {str(e)[:100]}"  # 限制错误消息长度
 
 

@@ -2,10 +2,10 @@
 ; 有关创建 Inno Setup 脚本文件的详细资料请查阅帮助文档！
 
 #define MyAppName "Smu_Course_Election_Helper"
-#define MyAppVersion "2.0"
+#define MyAppVersion "2.1"
 #define MyAppPublisher "Hong"
 #define MyAppURL "https://github.com/EricHongXDD/smu_course_election_helper"
-#define MyAppExeName "Smu_Course_Election_Helper_2.0.exe"
+#define MyAppExeName "Smu_Course_Election_Helper_2.1.exe"
 
 [Setup]
 ; 注: AppId的值为单独标识该应用程序。
@@ -21,13 +21,13 @@ AppSupportURL={#MyAppURL}
 AppUpdatesURL={#MyAppURL}
 DefaultDirName={autopf}\{#MyAppName}
 DisableProgramGroupPage=yes
-InfoBeforeFile=C:\Users\10292\PycharmProjects\smu_course_election_helper\dist\license.txt
-InfoAfterFile=C:\Users\10292\PycharmProjects\smu_course_election_helper\dist\finish.txt
+; 以下两行的路径需要根据您的实际环境修改
+; InfoBeforeFile=D:\code\works\smu_course_election_helper-2.0-TKGUI\dist\license.txt
+; InfoAfterFile=D:\code\works\smu_course_election_helper-2.0-TKGUI\dist\finish.txt
 ; 以下行取消注释，以在非管理安装模式下运行（仅为当前用户安装）。
 ;PrivilegesRequired=lowest
-OutputDir=C:\Users\10292\Desktop
-OutputBaseFilename=Smu_Course_Election_Helper_Setup
-SetupIconFile=C:\Users\10292\PycharmProjects\smu_course_election_helper\logo.ico
+OutputDir=dist
+OutputBaseFilename=Smu_Course_Election_Helper_Setup_2.1
 Compression=lzma
 SolidCompression=yes
 WizardStyle=modern
@@ -39,9 +39,10 @@ Name: "chinesesimp"; MessagesFile: "compiler:Default.isl"
 Name: "desktopicon"; Description: "{cm:CreateDesktopIcon}"; GroupDescription: "{cm:AdditionalIcons}"; Flags: unchecked
 
 [Files]
-Source: "C:\Users\10292\PycharmProjects\smu_course_election_helper\dist\Smu_Course_Election_Helper_2.0\Smu_Course_Election_Helper_2.0.exe"; DestDir: "{app}"; Flags: ignoreversion
-Source: "C:\Users\10292\PycharmProjects\smu_course_election_helper\dist\Smu_Course_Election_Helper_2.0\_internal\*"; DestDir: "{app}\_internal"; Flags: ignoreversion recursesubdirs createallsubdirs
-; 注意: 不要在任何共享系统文件上使用“Flags: ignoreversion”
+; 以下路径需要根据您的实际环境修改
+Source: "dist\Smu_Course_Election_Helper_2.1\{#MyAppExeName}"; DestDir: "{app}"; Flags: ignoreversion
+Source: "dist\Smu_Course_Election_Helper_2.1\_internal\*"; DestDir: "{app}\_internal"; Flags: ignoreversion recursesubdirs createallsubdirs
+; 注意: 不要在任何共享系统文件上使用"Flags: ignoreversion"
 
 [Icons]
 Name: "{autoprograms}\{#MyAppName}"; Filename: "{app}\{#MyAppExeName}"
