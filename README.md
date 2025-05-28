@@ -7,6 +7,7 @@ This project can not be used for commercial purposes, it is intended solely for 
 
 ## 功能介绍
 上海海事大学教务系统选课辅助软件
+![Uploading d45d142136b88480e3bacdcce8bc07d7.png…]()
 
 ### 更新日志
 相比V2.0版本，V2.1版本有以下更新：
