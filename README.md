@@ -1,4 +1,4 @@
-# smu_course_election_helper 3.0
+# smu_course_election_helper 2.1
 
 ## 声明 Statement
 本软件不得用于商业用途，仅供学习交流，切勿用于非法用途，对此产生的一切后果作者本人概不负责。
@@ -6,10 +6,10 @@
 This project can not be used for commercial purposes, it is intended solely for learning and communication. Do not use it for illegal purposes. The author is not responsible for any consequences that arise from its use.
 
 ## 功能介绍
-上海海事大学教务系统选课辅助软件，基于Request实现。
+上海海事大学教务系统选课辅助软件
 
 ### 更新日志
-相比V2.0版本，V3.0版本有以下更新：
+相比V2.0版本，V2.1版本有以下更新：
 
 1. 增加了**待抢课程列表**功能，可同时抢多门课程
 2. 优化了密码显示，使用星号(*)隐藏密码内容
