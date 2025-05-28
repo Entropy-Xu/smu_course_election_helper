@@ -1,4 +1,4 @@
-# smu_course_election_helper 2.1
+# smu_course_election_helper 3.0
 
 ## 声明 Statement
 本软件不得用于商业用途，仅供学习交流，切勿用于非法用途，对此产生的一切后果作者本人概不负责。
@@ -7,24 +7,22 @@ This project can not be used for commercial purposes, it is intended solely for 
 
 ## 功能介绍
 上海海事大学教务系统选课辅助软件
-![Uploading d45d142136b88480e3bacdcce8bc07d7.png…]()
-
+![](image/img1.png)
 ### 更新日志
-相比V2.0版本，V2.1版本有以下更新：
+相比V2.0版本，V3.0版本有以下更新：
 
 1. 增加了**待抢课程列表**功能，可同时抢多门课程
-2. 优化了密码显示，使用星号(*)隐藏密码内容
+2. 优化了密码显示，隐藏密码内容
 3. 添加了**结束按钮**，可随时终止抢课操作
 4. 支持**多线程抢课**，提高抢课效率
 5. 优化了界面布局，使用更加合理
 6. 添加了**日志记录功能**，记录抢课历史
-7. 改进了错误处理机制，程序更加稳定
+7. 改进了错误处理机制
 
 ## 安装与使用
 ### 安装方法
 1. 从release页面下载最新版本的安装包
 2. 直接运行安装程序，按照提示完成安装
-3. 如果杀毒软件报警，可以选择添加信任或使用免管理员权限版本
 
 ### 基本使用流程
 1. **登录**
@@ -78,5 +76,10 @@ This project can not be used for commercial purposes, it is intended solely for 
 - 原因：登录状态已过期
 - 解决方法：程序会自动尝试获取新的会话，无需手动操作
 
-## 免责声明
-本软件仅供学习交流使用，严禁用于非法用途。使用本软件产生的任何后果由使用者自行承担。 
+## 写在最后
+
+感谢@[孔昊旻(Haomin Kong)](https://github.com/a645162)提供的统一身份认证登录流程
+
+如需使用上海海事大学的其它工具，可参考以下项目：
+
+https://github.com/a645162/Digital-SHMTU-Tools
