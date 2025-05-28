@@ -9,7 +9,7 @@ This project can not be used for commercial purposes, it is intended solely for 
 上海海事大学教务系统选课辅助软件，基于Request实现。
 
 ### 更新日志
-相比V2.0版本，V2.1版本有以下更新：
+相比V2.0版本，V3.0版本有以下更新：
 
 1. 增加了**待抢课程列表**功能，可同时抢多门课程
 2. 优化了密码显示，使用星号(*)隐藏密码内容
