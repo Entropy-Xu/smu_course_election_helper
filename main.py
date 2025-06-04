@@ -455,6 +455,88 @@ class Application(tk.Tk):
             self.console_text.see(tk.END)
             time.sleep(wait_time)  # 使用秒为单位的等待时间
 
+    def start_elect_thread(self, lessonid, profileId):
+        """开始抢课的线程函数"""
+        session = self.session
+        if not session or not self.sessiontime:
+            message = f"Lessonid:{lessonid} 无法获取sessiontime，请重新登录"
+            self.console_text.insert(tk.END, f"\n{message}")
+            self.write_log(message)
+            return
+
+        # 获取用户设置的间隔秒数
+        try:
+            interval_seconds = float(self.interval_entry.get())
+            if interval_seconds < 0:
+                interval_seconds = 0
+        except ValueError:
+            interval_seconds = 1  # 默认为1秒
+            self.interval_entry.delete(0, tk.END)
+            self.interval_entry.insert(0, "1")
+
+        # 将结果显示在控制台文本框中
+        message = f"开始抢课 {lessonid} sessiontime={self.sessiontime} 间隔={interval_seconds}秒"
+        self.console_text.insert(tk.END, f"\n{message}")
+        self.write_log(message)
+        self.console_text.see(tk.END)  # 滚动到文本框底部
+
+        count = 0
+        consecutive_errors = 0  # 连续错误计数
+        max_consecutive_errors = 5  # 最大连续错误次数
+
+        while not self.stop_flag:  # 检查停止标志
+            if consecutive_errors >= max_consecutive_errors:
+                message = f"Lessonid:{lessonid} 连续出错{max_consecutive_errors}次，暂停该课程抢课"
+                self.console_text.insert(tk.END, f"\n{message}")
+                self.write_log(message)
+                self.console_text.see(tk.END)
+                break
+
+            count += 1
+            result = tools.elect(session, profileId, self.sessiontime, lessonid)
+
+            # 在UI线程中更新文本框
+            current_time = time.strftime("%Y-%m-%d %H:%M:%S", time.localtime())
+            message = f"[{current_time}] Lessonid:{lessonid} 第{count}次抢课 结果: {result}"
+            self.console_text.insert(tk.END, f"\n{message}")
+            self.console_text.see(tk.END)  # 滚动到文本框底部
+
+            # 如果抢课成功包含"成功"，则退出循环
+            if "成功" in result:
+                message = f"[{current_time}] Lessonid:{lessonid} 抢课成功！停止抢课"
+                self.console_text.insert(tk.END, f"\n{message}")
+                self.write_log(message)
+                self.console_text.see(tk.END)
+                break
+
+            # 检查session是否过期
+            if "会话已经失效" in result:
+                # 重新获取sessiontime
+                new_sessiontime = tools.get_sessiontime(session, profileId)
+                if new_sessiontime:
+                    self.sessiontime = new_sessiontime
+                    message = f"[{current_time}] Lessonid:{lessonid} 会话已失效，已更新sessiontime={self.sessiontime}"
+                    self.console_text.insert(tk.END, f"\n{message}")
+                    self.write_log(message)
+                    consecutive_errors = 0  # 重置错误计数
+                else:
+                    consecutive_errors += 1
+                    message = f"[{current_time}] Lessonid:{lessonid} 无法获取新的sessiontime，尝试次数: {consecutive_errors}"
+                    self.console_text.insert(tk.END, f"\n{message}")
+                    self.write_log(message)
+            elif "错误" in result or "超时" in result or "连接错误" in result:
+                consecutive_errors += 1
+                message = f"[{current_time}] Lessonid:{lessonid} 发生错误，尝试次数: {consecutive_errors}"
+                self.console_text.insert(tk.END, f"\n{message}")
+                if consecutive_errors >= 3:  # 只在错误较严重时记录日志
+                    self.write_log(message)
+            else:
+                consecutive_errors = 0  # 重置连续错误计数
+
+            # 使用用户设置的间隔秒数进行休眠
+            if not self.stop_flag and "成功" not in result:
+                time.sleep(interval_seconds)
+
 
 # 运行程序
 if __name__ == "__main__":
