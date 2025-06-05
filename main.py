@@ -207,11 +207,15 @@ class Application(tk.Tk):
         self.semester_combobox.bind("<<ComboboxSelected>>", self.on_combobox_select)
         self.tree.bind("<<TreeviewSelect>>", self.on_tree_select)
 
-    def only_numeric_input(self,P):
-        # 如果输入为空或者为数字，则验证通过
-        if P.isdigit() or P == "":
+    def only_numeric_input(self, P):
+        # 如果输入为空，则验证通过
+        if P == "":
             return True
-        else:
+        # 检查输入是否为有效的浮点数格式
+        try:
+            float(P)
+            return True
+        except ValueError:
             return False
 
     def set_captcha_pic(self):
