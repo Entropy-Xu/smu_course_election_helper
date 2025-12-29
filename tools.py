@@ -229,4 +229,54 @@ def elect(session, profileId, elecSessionTime, lessonid):
         print("错误信息：", e)
         return f"发生错误: {str(e)[:100]}"  # 限制错误消息长度
 
+def get_lesson_info(session, lesson_id):
+    """通过lessonid获取课程信息"""
+    try:
+        url = f"https://jwxt.shmtu.edu.cn/shmtu/teachTaskSearch!info.action?lesson.id={lesson_id}"
+        response = session.get(url, timeout=10)
+        soup = BeautifulSoup(response.text, 'lxml')
 
+        # 提取课程信息
+        course_name = ""
+        teacher = ""
+        course_code = ""
+        course_seq = ""
+
+        # 查找infoTable中的信息
+        rows = soup.select('table.infoTable tr')
+        for row in rows:
+            cells = row.find_all('td')
+            # 遍历每对 title-content
+            for i in range(0, len(cells) - 1, 2):
+                if 'title' in cells[i].get('class', []):
+                    label = cells[i].get_text(strip=True)
+                    value = cells[i + 1].get_text(strip=True)
+
+                    if '课程名' in label and '课程名称' not in label:
+                        course_name = value
+                    elif '课程名称' in label:
+                        course_name = value
+                    elif label == '教师:' or label == '教师：':
+                        teacher = value
+                    elif '课程号' in label and '课序号' not in label:
+                        course_code = value
+                    elif '课序号' in label:
+                        course_seq = value
+
+
+        return {
+            'course_name': course_name,
+            'teacher': teacher,
+            'course_code': course_code,
+            'course_seq': course_seq,
+            'success': bool(course_name or teacher)
+        }
+    except Exception as e:
+        print(f"获取课程信息出错: {e}")
+        return {
+            'course_name': '',
+            'teacher': '',
+            'course_code': '',
+            'course_seq': '',
+            'success': False
+        }

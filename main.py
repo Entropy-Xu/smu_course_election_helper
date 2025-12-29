@@ -179,6 +179,8 @@ class Application(tk.Tk):
         # 第七行：间隔时间和搜索按钮
         interval_label.grid(row=6, column=0, padx=padx_value, pady=pady_value, sticky='e')
         self.interval_entry.grid(row=6, column=1, padx=padx_value, pady=pady_value, sticky='w')
+        add_manual_button = ttk.Button(self, text="手动添加Lessonid", command=self.add_manual_lessonid)
+        add_manual_button.grid(row=6, column=2, padx=padx_value, pady=pady_value)
         self.lesson_button.grid(row=6, column=3, padx=padx_value, pady=pady_value)
         
         # 第八行：课程搜索结果表格
@@ -540,6 +542,38 @@ class Application(tk.Tk):
             # 使用用户设置的间隔秒数进行休眠
             if not self.stop_flag and "成功" not in result:
                 time.sleep(interval_seconds)
+
+    def add_manual_lessonid(self):
+        lesson_id = self.lessonid_entry.get()
+        if lesson_id:
+            # 检查是否已存在于待抢列表中
+            for qid in self.queue_tree.get_children():
+                if str(self.queue_tree.item(qid)['values'][0]) == str(lesson_id):
+                    self.console_text.insert(tk.END, "\n该课程已在待抢列表中")
+                    return  # 已存在，不重复添加
+
+            # 尝试获取课程信息
+            course_name = ""
+            teacher = ""
+            if self.session:
+                self.console_text.insert(tk.END, f"\n正在获取课程信息 Lessonid: {lesson_id}...")
+                self.console_text.see(tk.END)
+                self.update()  # 刷新界面
+
+                info = tools.get_lesson_info(self.session, lesson_id)
+                if info['success']:
+                    course_name = info['course_name']
+                    teacher = info['teacher']
+                    self.console_text.insert(tk.END, f"\n获取成功: {course_name} - {teacher}")
+                else:
+                    self.console_text.insert(tk.END, f"\n未能获取到课程信息，将仅添加Lessonid")
+
+            # 添加到待抢列表
+            self.queue_tree.insert('', 'end', values=(lesson_id, course_name, teacher))
+            self.console_text.insert(tk.END, f"\n手动添加课程到待抢列表 Lessonid: {lesson_id}")
+            self.console_text.see(tk.END)
+        else:
+            self.console_text.insert(tk.END, "\n请输入有效的Lessonid")
 
 
 # 运行程序
